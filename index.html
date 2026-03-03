@@ -24,14 +24,14 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen pb-40">
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-40 transition-colors duration-500">
 
     <header class="p-6 sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/5 flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-black text-emerald-400 italic">নূর এগ্রো প্রো</h1>
             <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Premium Agri Solutions</p>
         </div>
-        <button onclick="toggleTheme()" class="p-3 rounded-2xl bg-slate-900 border border-white/10 text-yellow-400 active:scale-90 transition-all shadow-lg shadow-yellow-900/10">
+        <button onclick="toggleTheme()" class="p-3 rounded-2xl bg-slate-900 border border-white/10 text-yellow-400 active:scale-90 transition-all shadow-lg">
             <i data-lucide="sun" id="theme-icon"></i>
         </button>
     </header>
@@ -48,14 +48,14 @@
             <div onclick="setCrop('পাট', '#84cc16', this)" class="crop-btn flex-shrink-0 w-24 p-5 rounded-[2.5rem] glass-card text-center text-lime-500">
                 <i data-lucide="leaf" class="mx-auto mb-2"></i><span class="text-xs font-bold">পাট</span>
             </div>
-            <div onclick="setCrop('ভুট্টা', '#fbbf24', this)" class="crop-btn flex-shrink-0 w-24 p-5 rounded-[2.5rem] glass-card text-center text-yellow-500">
-                <i data-lucide="corn" class="mx-auto mb-2"></i><span class="text-xs font-bold">ভুট্টা</span>
+            <div onclick="setCrop('মরিচ', '#ef4444', this)" class="crop-btn flex-shrink-0 w-24 p-5 rounded-[2.5rem] glass-card text-center text-red-500">
+                <i data-lucide="flame" class="mx-auto mb-2"></i><span class="text-xs font-bold">মরিচ</span>
             </div>
         </div>
 
         <div class="flex bg-slate-900/50 p-1.5 rounded-2xl border border-white/5">
             <button onclick="showTab('simple')" id="btn-simple" class="flex-1 py-3 rounded-xl font-bold text-sm bg-emerald-600">সাধারণ হিসাব</button>
-            <button onclick="showTab('multi')" id="btn-multi" class="flex-1 py-3 rounded-xl font-bold text-sm">মাল্টি-লট (বাবার ঘর)</button>
+            <button onclick="showTab('multi')" id="btn-multi" class="flex-1 py-3 rounded-xl font-bold text-sm">লট হিসাব (বাবার ঘর)</button>
         </div>
 
         <div id="simple-tab" class="tab-content active space-y-6">
@@ -83,10 +83,9 @@
                     <input type="number" id="m-mon" placeholder="মণ" class="p-4 rounded-2xl bg-slate-900 border border-white/5 text-center font-bold">
                     <input type="number" id="m-kg" placeholder="কেজি" class="p-4 rounded-2xl bg-slate-900 border border-white/5 text-center font-bold">
                 </div>
-                <input type="number" id="m-rate" placeholder="মণ প্রতি দর (৳)" class="w-full p-4 rounded-2xl bg-slate-900 border border-white/5 text-center font-bold text-amber-500">
-                <button onclick="addLot()" class="w-full py-4 bg-purple-600 rounded-2xl font-bold active:scale-95 transition-all shadow-lg shadow-purple-900/20">বাড়ি/লট যোগ করুন</button>
-                
-                <div id="lot-list" class="space-y-2 mt-4 max-h-48 overflow-y-auto pr-2"></div>
+                <input type="number" id="m-rate" placeholder="এই লটের দর (৳)" class="w-full p-4 rounded-2xl bg-slate-900 border border-white/5 text-center font-bold text-amber-500">
+                <button onclick="addLot()" class="w-full py-4 bg-purple-600 rounded-2xl font-bold active:scale-95 transition-all shadow-lg">লিস্টে যোগ করুন</button>
+                <div id="lot-list" class="space-y-2 max-h-48 overflow-y-auto"></div>
             </section>
         </div>
 
@@ -97,71 +96,52 @@
                     <h3 id="res-weight" class="text-2xl font-black text-emerald-400">০ মণ ০ কেজি</h3>
                 </div>
                 <div class="text-right">
-                    <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">১ কেজি দাম</span>
+                    <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">গড় কেজি দাম</span>
                     <h3 id="res-kg-price" class="text-lg font-bold text-amber-500">৳ ০.০</h3>
                 </div>
             </div>
-            
-            <div class="space-y-1">
+            <div class="space-y-1 text-center">
                 <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest block">সর্বমোট প্রদেয় টাকা</span>
                 <h2 id="res-total-price" class="text-5xl font-black tracking-tighter">৳ ০.০০</h2>
             </div>
-
             <div id="res-text-explain" class="bg-black/20 p-3 rounded-xl text-[11px] font-bold text-center text-slate-400 border border-white/5">
                 হিসাব করার জন্য তথ্য ইনপুট দিন...
             </div>
         </section>
 
         <section class="glass-card p-6 border-l-4 border-blue-500 space-y-5 mb-10">
-            <div class="flex justify-between items-center">
-                <h3 class="font-bold flex items-center gap-2 text-blue-400"><i data-lucide="package" class="w-5 h-5"></i> বস্তা অনুযায়ী হিসাব</h3>
-                <span class="px-3 py-1 bg-blue-500/10 rounded-full text-[9px] font-bold text-blue-400 border border-blue-500/20 uppercase tracking-widest">Bag Calculator</span>
-            </div>
+            <h3 class="font-bold flex items-center gap-2 text-blue-400"><i data-lucide="package"></i> মিক্সড বস্তা হিসাব</h3>
             
-            <div class="flex items-center justify-between bg-slate-900/50 p-2 rounded-3xl border border-white/5">
-                <button onclick="updateBagCount(-1)" class="w-12 h-12 rounded-2xl bg-slate-800 text-blue-400 active:scale-90"><i data-lucide="minus"></i></button>
-                <div class="text-center">
-                    <input type="number" id="bag-num" value="0" oninput="runBag()" class="w-16 bg-transparent text-center text-2xl font-black outline-none text-blue-400">
-                    <p class="text-[9px] font-bold opacity-40 uppercase leading-none">বস্তা সংখ্যা</p>
+            <div class="space-y-3" id="bag-rows">
                 </div>
-                <button onclick="updateBagCount(1)" class="w-12 h-12 rounded-2xl bg-blue-600 text-white active:scale-90 shadow-lg shadow-blue-500/20"><i data-lucide="plus"></i></button>
-            </div>
 
-            <div class="grid grid-cols-4 gap-2">
-                <button onclick="setBagWt(40)" class="py-2.5 rounded-xl bg-slate-800 text-[10px] font-bold border border-white/5 active:bg-blue-500 transition-colors">৪০ কেজি</button>
-                <button onclick="setBagWt(50)" class="py-2.5 rounded-xl bg-slate-800 text-[10px] font-bold border border-white/5 active:bg-blue-500 transition-colors">৫০ কেজি</button>
-                <button onclick="setBagWt(60)" class="py-2.5 rounded-xl bg-slate-800 text-[10px] font-bold border border-white/5 active:bg-blue-500 transition-colors">৬০ কেজি</button>
-                <button onclick="setBagWt(80)" class="py-2.5 rounded-xl bg-slate-800 text-[10px] font-bold border border-white/5 active:bg-blue-500 transition-colors">৮০ কেজি</button>
-            </div>
-            
-            <div class="space-y-1">
-                <label class="text-[10px] font-bold opacity-40 ml-2 uppercase">কাস্টম ওজন (কেজি)</label>
-                <input type="number" id="bag-wt" oninput="runBag()" placeholder="ওজন লিখুন" class="w-full p-4 rounded-2xl bg-slate-900 border border-white/5 text-center font-bold text-blue-400">
-            </div>
+            <button onclick="addBagRow()" class="w-full py-3 rounded-xl border-2 border-dashed border-blue-500/30 text-blue-400 font-bold text-sm active:scale-95 transition-all">
+                + নতুন বস্তার ওজন যোগ করুন
+            </button>
 
-            <div id="bag-result" class="p-4 text-center text-xs font-bold text-blue-400 bg-blue-500/5 rounded-2xl border border-blue-500/10 italic">
-                বস্তার তথ্য দিলে মূল হিসাবে যোগ হবে...
+            <div id="bag-summary" class="p-4 text-center text-xs font-bold text-blue-400 bg-blue-500/5 rounded-2xl border border-blue-500/10 italic">
+                বস্তার সংখ্যা দিলে মূল ওজন ও দামে যোগ হবে
             </div>
         </section>
 
     </main>
 
     <nav class="fixed bottom-6 left-4 right-4 h-20 glass-card flex items-center justify-around px-8 z-50 border border-white/10 shadow-2xl">
-        <button onclick="showTab('simple')" class="text-emerald-400 flex flex-col items-center"><i data-lucide="calculator" class="w-6 h-6"></i><span class="text-[10px] font-bold mt-1">ক্যালকুলেটর</span></button>
-        <button onclick="resetAll()" class="w-16 h-16 bg-red-500 rounded-full -mt-14 shadow-xl shadow-red-500/40 flex items-center justify-center text-white ring-[8px] ring-slate-950 active:scale-90 transition-all"><i data-lucide="refresh-cw"></i></button>
-        <button onclick="showTab('multi')" class="text-slate-500 flex flex-col items-center opacity-40"><i data-lucide="history" class="w-6 h-6"></i><span class="text-[10px] font-bold mt-1">লট লিস্ট</span></button>
+        <button onclick="showTab('simple')" class="text-emerald-400 flex flex-col items-center"><i data-lucide="calculator"></i><span class="text-[10px] font-bold">ক্যালকুলেটর</span></button>
+        <button onclick="resetAll()" class="w-16 h-16 bg-red-500 rounded-full -mt-14 shadow-xl flex items-center justify-center text-white ring-[8px] ring-slate-950 active:scale-90 transition-all"><i data-lucide="refresh-cw"></i></button>
+        <button onclick="showTab('multi')" class="text-slate-500 flex flex-col items-center opacity-40"><i data-lucide="list"></i><span class="text-[10px] font-bold">লট লিস্ট</span></button>
     </nav>
 
     <script>
         lucide.createIcons();
         let currentTab = 'simple';
         let lots = [];
+        let bagData = [{ id: Date.now(), count: 0, wt: 40 }];
 
         function showTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tab + '-tab').classList.add('active');
-            
             document.getElementById('btn-simple').classList.toggle('bg-emerald-600', tab === 'simple');
             document.getElementById('btn-multi').classList.toggle('bg-purple-600', tab === 'multi');
             updateFinal();
@@ -173,46 +153,67 @@
             updateFinal();
         }
 
-        function updateBagCount(val) {
-            let num = parseInt(document.getElementById('bag-num').value) || 0;
-            num = Math.max(0, num + val);
-            document.getElementById('bag-num').value = num;
-            runBag();
+        function addBagRow() {
+            bagData.push({ id: Date.now(), count: 0, wt: 40 });
+            renderBags();
         }
 
-        function setBagWt(wt) {
-            document.getElementById('bag-wt').value = wt;
-            runBag();
+        function removeBagRow(id) {
+            bagData = bagData.filter(b => b.id !== id);
+            renderBags();
+            updateFinal();
         }
 
-        function runBag() {
-            const num = parseInt(document.getElementById('bag-num').value) || 0;
-            const wt = parseFloat(document.getElementById('bag-wt').value) || 0;
-            const totalKg = num * wt;
-            
-            const mon = Math.floor(totalKg / 40);
-            const kg = (totalKg % 40).toFixed(2);
-            
-            document.getElementById('bag-result').innerHTML = `মোট ওজন: <span class="text-white">${totalKg} কেজি</span> <br> (${mon} মণ ${kg} কেজি)`;
-            
-            if(currentTab === 'simple') {
-                document.getElementById('s-mon').value = mon || '';
-                document.getElementById('s-kg').value = kg > 0 ? kg : '';
-                runSimple();
-            }
+        function renderBags() {
+            const container = document.getElementById('bag-rows');
+            container.innerHTML = bagData.map(b => `
+                <div class="flex items-center gap-3 bg-slate-900/50 p-2 rounded-2xl border border-white/5 animate-fade">
+                    <div class="flex-1 flex items-center justify-between bg-slate-800 rounded-xl px-2">
+                        <button onclick="updateBagCount(${b.id}, -1)" class="p-2 text-blue-400"><i data-lucide="minus-circle" class="w-4 h-4"></i></button>
+                        <input type="number" value="${b.count}" oninput="updateBagData(${b.id}, 'count', this.value)" class="w-12 bg-transparent text-center font-bold outline-none text-sm">
+                        <button onclick="updateBagCount(${b.id}, 1)" class="p-2 text-blue-400"><i data-lucide="plus-circle" class="w-4 h-4"></i></button>
+                    </div>
+                    <div class="flex-1 flex items-center gap-1 bg-slate-800 rounded-xl px-3 py-2">
+                        <input type="number" value="${b.wt}" oninput="updateBagData(${b.id}, 'wt', this.value)" class="w-full bg-transparent text-center font-bold outline-none text-sm">
+                        <span class="text-[10px] opacity-40">কেজি</span>
+                    </div>
+                    <button onclick="removeBagRow(${b.id})" class="p-2 text-red-400"><i data-lucide="x" class="w-4 h-4"></i></button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+            calculateBagTotal();
         }
 
-        function runSimple() { updateFinal(); }
+        function updateBagCount(id, val) {
+            const bag = bagData.find(b => b.id === id);
+            bag.count = Math.max(0, parseInt(bag.count || 0) + val);
+            renderBags();
+            updateFinal();
+        }
+
+        function updateBagData(id, key, val) {
+            const bag = bagData.find(b => b.id === id);
+            bag[key] = parseFloat(val) || 0;
+            calculateBagTotal();
+            updateFinal();
+        }
+
+        function calculateBagTotal() {
+            let totalKg = bagData.reduce((s, b) => s + (b.count * b.wt), 0);
+            let totalBags = bagData.reduce((s, b) => s + parseInt(b.count || 0), 0);
+            const m = Math.floor(totalKg / 40);
+            const k = (totalKg % 40).toFixed(2);
+            document.getElementById('bag-summary').innerHTML = `মোট ${totalBags} টি বস্তায় <span class="text-white">${totalKg} কেজি</span> <br> (${m} মণ ${k} কেজি)`;
+            return totalKg;
+        }
 
         function addLot() {
             const mon = parseFloat(document.getElementById('m-mon').value) || 0;
             const kg = parseFloat(document.getElementById('m-kg').value) || 0;
             const rate = parseFloat(document.getElementById('m-rate').value) || 0;
-
             if((mon + kg) > 0 && rate > 0) {
                 const totalKg = (mon * 40) + kg;
-                const price = totalKg * (rate / 40);
-                lots.push({ mon, kg, totalKg, rate, price });
+                lots.push({ mon, kg, totalKg, rate, price: totalKg * (rate / 40) });
                 renderLots();
                 updateFinal();
                 document.getElementById('m-mon').value = '';
@@ -221,74 +222,64 @@
         }
 
         function renderLots() {
-            const list = document.getElementById('lot-list');
-            list.innerHTML = lots.map((l, i) => `
-                <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5 animate-fade">
-                    <div class="text-xs">
-                        <p class="font-bold">বাড়ি-${i+1}: <span class="text-emerald-400">${l.mon} মণ ${l.kg} কেজি</span></p>
-                        <p class="opacity-50">দর: ৳${l.rate} | মোট: ৳${l.price.toFixed(2)}</p>
-                    </div>
-                    <button onclick="removeLot(${i})" class="text-red-400 p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            document.getElementById('lot-list').innerHTML = lots.map((l, i) => `
+                <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 mt-2 animate-fade text-xs">
+                    <div><b>লট-${i+1}:</b> ${l.mon} মণ ${l.kg} কেজি <br><span class="opacity-50">দর: ৳${l.rate} | মোট: ৳${l.price.toFixed(2)}</span></div>
+                    <button onclick="lots.splice(${i},1);renderLots();updateFinal();" class="text-red-400 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        function removeLot(i) { lots.splice(i, 1); renderLots(); updateFinal(); }
+        function runSimple() { updateFinal(); }
 
         function updateFinal() {
-            let totalKg = 0;
+            let totalKg = calculateBagTotal();
             let totalPrice = 0;
-            let avgRate = 0;
+            let lastRate = 0;
 
             if(currentTab === 'simple') {
                 const mon = parseFloat(document.getElementById('s-mon').value) || 0;
                 const kg = parseFloat(document.getElementById('s-kg').value) || 0;
-                const rate = parseFloat(document.getElementById('s-rate').value) || 0;
-                totalKg = (mon * 40) + kg;
-                totalPrice = totalKg * (rate / 40);
-                avgRate = rate;
+                lastRate = parseFloat(document.getElementById('s-rate').value) || 0;
+                totalKg += (mon * 40) + kg;
+                totalPrice = totalKg * (lastRate / 40);
             } else {
-                totalKg = lots.reduce((sum, l) => sum + l.totalKg, 0);
-                totalPrice = lots.reduce((sum, l) => sum + l.price, 0);
-                avgRate = totalKg > 0 ? (totalPrice / totalKg) * 40 : 0;
+                totalKg += lots.reduce((s, l) => s + l.totalKg, 0);
+                totalPrice = lots.reduce((s, l) => s + l.price, 0);
+                // For bags in multi-lot, we use the average rate of existing lots
+                let avgRate = lots.length > 0 ? (totalPrice / (totalKg - calculateBagTotal())) * 40 : 0;
+                totalPrice += calculateBagTotal() * (avgRate / 40);
+                lastRate = avgRate;
             }
 
             const m = Math.floor(totalKg / 40);
             const k = (totalKg % 40).toFixed(2);
-            
             document.getElementById('res-weight').innerText = `${m} মণ ${k} কেজি`;
-            document.getElementById('res-kg-price').innerText = `৳ ${(avgRate/40).toFixed(2)}`;
-            document.getElementById('res-total-price').innerText = `৳ ${totalPrice.toLocaleString('bn-BD', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('res-kg-price').innerText = `৳ ${(lastRate/40).toFixed(2)}`;
+            document.getElementById('res-total-price').innerText = `৳ ${totalPrice.toLocaleString('bn-BD', {minimumFractionDigits: 2})}`;
             
             if(totalKg > 0) {
-                document.getElementById('res-text-explain').innerHTML = `মালের হিসাবে <span class="text-emerald-400">${totalKg} কেজি</span> ওজনে <span class="text-amber-400">${m} মণ ${k} কেজি</span> হয়েছে।`;
-            } else {
-                document.getElementById('res-text-explain').innerText = "হিসাব করার জন্য তথ্য ইনপুট দিন...";
+                document.getElementById('res-text-explain').innerHTML = `<span class="text-emerald-400">${totalKg} কেজি</span> মালের হিসাবে <span class="text-amber-400">${m} মণ ${k} কেজি</span> হয়েছে।`;
             }
         }
 
         function resetAll() {
             if(confirm('সব ডাটা মুছে ফেলতে চান?')) {
                 document.querySelectorAll('input').forEach(i => i.value = '');
-                lots = [];
-                renderLots();
-                document.getElementById('bag-num').value = 0;
-                document.getElementById('bag-result').innerText = 'বস্তার তথ্য দিলে মূল হিসাবে যোগ হবে...';
-                updateFinal();
+                lots = []; bagData = [{ id: Date.now(), count: 0, wt: 40 }];
+                renderLots(); renderBags(); updateFinal();
             }
         }
 
         function toggleTheme() {
             document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            document.getElementById('theme-icon').setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            document.getElementById('theme-icon').setAttribute('data-lucide', document.documentElement.classList.contains('dark') ? 'sun' : 'moon');
             lucide.createIcons();
         }
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
-        }
+        renderBags();
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
 </html>
