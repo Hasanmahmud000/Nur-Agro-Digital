@@ -1,10 +1,5 @@
 const CACHE_NAME = 'noor-agro-v2';
-const assets = [
-  './',
-  './index.html',
-  'https://cdn.tailwindcss.com',
-  'https://unpkg.com/lucide@latest'
-];
+const assets = ['./', './index.html', 'https://cdn.tailwindcss.com'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(assets)));
