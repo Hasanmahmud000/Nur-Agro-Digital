@@ -60,19 +60,28 @@
 
         <div id="simple-tab" class="tab-content active space-y-6">
             <section class="glass-card p-6 border-l-4 border-emerald-500 space-y-4">
+                <div id="dhora-container" class="hidden animate-fade">
+                    <label class="text-[11px] font-bold text-lime-400 ml-2 uppercase">পাটের ধরা হিসাব (১ ধরা = ৫ কেজি)</label>
+                    <input type="number" id="s-dhora" oninput="calcFromDhora()" placeholder="ধরা সংখ্যা লিখুন" class="w-full p-4 rounded-2xl bg-slate-900 border border-lime-500/30 text-xl font-bold text-center text-lime-400">
+                </div>
+
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-1">
                         <label class="text-[11px] font-bold opacity-40 ml-2 uppercase">মণ পরিমাণ</label>
-                        <input type="number" id="s-mon" oninput="runSimple()" placeholder="০" class="w-full p-4 rounded-2xl bg-slate-900 border border-white/5 text-xl font-bold text-center">
+                        <input type="number" id="s-mon" oninput="runSimple()" placeholder="" class="w-full p-4 rounded-2xl bg-slate-900 border border-white/5 text-xl font-bold text-center">
                     </div>
                     <div class="space-y-1">
                         <label class="text-[11px] font-bold opacity-40 ml-2 uppercase">কেজি পরিমাণ</label>
-                        <input type="number" id="s-kg" oninput="runSimple()" placeholder="০" class="w-full p-4 rounded-2xl bg-slate-900 border border-white/5 text-xl font-bold text-center text-emerald-400">
+                        <input type="number" id="s-kg" oninput="runSimple()" placeholder="" class="w-full p-4 rounded-2xl bg-slate-900 border border-white/5 text-xl font-bold text-center text-emerald-400">
                     </div>
                 </div>
                 <div class="space-y-1">
                     <label class="text-[11px] font-bold opacity-40 ml-2 uppercase">মণ প্রতি দর (টাকা)</label>
-                    <input type="number" id="s-rate" oninput="runSimple()" placeholder="৳ দর লিখুন" class="w-full p-5 rounded-3xl bg-slate-900 border border-white/5 text-2xl font-black text-center text-amber-500">
+                    <input type="number" id="s-rate" oninput="runSimple()" placeholder="দর লিখুন" class="w-full p-5 rounded-3xl bg-slate-900 border border-white/5 text-2xl font-black text-center text-amber-500">
+                </div>
+                <div class="space-y-1 pt-2 border-t border-white/5">
+                    <label class="text-[11px] font-bold text-red-400 ml-2 uppercase italic">অগ্রিম জমা টাকা (মাইনাস হবে)</label>
+                    <input type="number" id="s-advance" oninput="runSimple()" placeholder="অগ্রিম দিলে লিখুন" class="w-full p-4 rounded-2xl bg-red-900/10 border border-red-500/20 text-xl font-bold text-center text-red-400">
                 </div>
             </section>
         </div>
@@ -83,7 +92,7 @@
                     <input type="number" id="m-mon" placeholder="মণ" class="p-4 rounded-2xl bg-slate-900 border border-white/5 text-center font-bold">
                     <input type="number" id="m-kg" placeholder="কেজি" class="p-4 rounded-2xl bg-slate-900 border border-white/5 text-center font-bold">
                 </div>
-                <input type="number" id="m-rate" placeholder="এই লটের দর (৳)" class="w-full p-4 rounded-2xl bg-slate-900 border border-white/5 text-center font-bold text-amber-500">
+                <input type="number" id="m-rate" placeholder="দর (৳)" class="w-full p-4 rounded-2xl bg-slate-900 border border-white/5 text-center font-bold text-amber-500">
                 <button onclick="addLot()" class="w-full py-4 bg-purple-600 rounded-2xl font-bold active:scale-95 transition-all shadow-lg">লিস্টে যোগ করুন</button>
                 <div id="lot-list" class="space-y-2 max-h-48 overflow-y-auto"></div>
             </section>
@@ -96,29 +105,26 @@
                     <h3 id="res-weight" class="text-2xl font-black text-emerald-400">০ মণ ০ কেজি</h3>
                 </div>
                 <div class="text-right">
-                    <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">গড় কেজি দাম</span>
+                    <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">১ কেজির দাম</span>
                     <h3 id="res-kg-price" class="text-lg font-bold text-amber-500">৳ ০.০</h3>
                 </div>
             </div>
             <div class="space-y-1 text-center">
-                <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest block">সর্বমোট প্রদেয় টাকা</span>
+                <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest block">বাকি পাওনা টাকা (নিট)</span>
                 <h2 id="res-total-price" class="text-5xl font-black tracking-tighter">৳ ০.০০</h2>
+                <div id="res-subtotal" class="text-[10px] font-bold text-slate-500 uppercase"></div>
             </div>
             <div id="res-text-explain" class="bg-black/20 p-3 rounded-xl text-[11px] font-bold text-center text-slate-400 border border-white/5">
                 হিসাব করার জন্য তথ্য ইনপুট দিন...
             </div>
         </section>
 
-        <section class="glass-card p-6 border-l-4 border-blue-500 space-y-5 mb-10">
+        <section id="bag-section" class="glass-card p-6 border-l-4 border-blue-500 space-y-5 mb-10">
             <h3 class="font-bold flex items-center gap-2 text-blue-400"><i data-lucide="package"></i> মিক্সড বস্তা হিসাব</h3>
-            
-            <div class="space-y-3" id="bag-rows">
-                </div>
-
+            <div class="space-y-3" id="bag-rows"></div>
             <button onclick="addBagRow()" class="w-full py-3 rounded-xl border-2 border-dashed border-blue-500/30 text-blue-400 font-bold text-sm active:scale-95 transition-all">
                 + নতুন বস্তার ওজন যোগ করুন
             </button>
-
             <div id="bag-summary" class="p-4 text-center text-xs font-bold text-blue-400 bg-blue-500/5 rounded-2xl border border-blue-500/10 italic">
                 বস্তার সংখ্যা দিলে মূল ওজন ও দামে যোগ হবে
             </div>
@@ -135,6 +141,7 @@
     <script>
         lucide.createIcons();
         let currentTab = 'simple';
+        let currentCrop = 'ধান';
         let lots = [];
         let bagData = [{ id: Date.now(), count: 0, wt: 40 }];
 
@@ -148,9 +155,30 @@
         }
 
         function setCrop(name, color, el) {
+            currentCrop = name;
             document.querySelectorAll('.crop-btn').forEach(b => b.classList.remove('active-crop'));
             el.classList.add('active-crop');
+            
+            const bagSec = document.getElementById('bag-section');
+            const dhoraSec = document.getElementById('dhora-container');
+            
+            if(name === 'পাট') {
+                bagSec.classList.add('hidden');
+                dhoraSec.classList.remove('hidden');
+            } else {
+                bagSec.classList.remove('hidden');
+                dhoraSec.classList.add('hidden');
+            }
             updateFinal();
+        }
+
+        // পাটের ধরা হিসাব (১ ধরা = ৫ কেজি)
+        function calcFromDhora() {
+            const dhora = parseFloat(document.getElementById('s-dhora').value) || 0;
+            const totalKg = dhora * 5;
+            document.getElementById('s-mon').value = Math.floor(totalKg / 40) || "";
+            document.getElementById('s-kg').value = (totalKg % 40) || "";
+            runSimple();
         }
 
         function addBagRow() {
@@ -170,11 +198,11 @@
                 <div class="flex items-center gap-3 bg-slate-900/50 p-2 rounded-2xl border border-white/5 animate-fade">
                     <div class="flex-1 flex items-center justify-between bg-slate-800 rounded-xl px-2">
                         <button onclick="updateBagCount(${b.id}, -1)" class="p-2 text-blue-400"><i data-lucide="minus-circle" class="w-4 h-4"></i></button>
-                        <input type="number" value="${b.count}" oninput="updateBagData(${b.id}, 'count', this.value)" class="w-12 bg-transparent text-center font-bold outline-none text-sm">
+                        <input type="number" value="${b.count || ''}" oninput="updateBagData(${b.id}, 'count', this.value)" class="w-12 bg-transparent text-center font-bold outline-none text-sm">
                         <button onclick="updateBagCount(${b.id}, 1)" class="p-2 text-blue-400"><i data-lucide="plus-circle" class="w-4 h-4"></i></button>
                     </div>
                     <div class="flex-1 flex items-center gap-1 bg-slate-800 rounded-xl px-3 py-2">
-                        <input type="number" value="${b.wt}" oninput="updateBagData(${b.id}, 'wt', this.value)" class="w-full bg-transparent text-center font-bold outline-none text-sm">
+                        <input type="number" value="${b.wt || ''}" oninput="updateBagData(${b.id}, 'wt', this.value)" class="w-full bg-transparent text-center font-bold outline-none text-sm">
                         <span class="text-[10px] opacity-40">কেজি</span>
                     </div>
                     <button onclick="removeBagRow(${b.id})" class="p-2 text-red-400"><i data-lucide="x" class="w-4 h-4"></i></button>
@@ -199,6 +227,7 @@
         }
 
         function calculateBagTotal() {
+            if(currentCrop === 'পাট') return 0;
             let totalKg = bagData.reduce((s, b) => s + (b.count * b.wt), 0);
             let totalBags = bagData.reduce((s, b) => s + parseInt(b.count || 0), 0);
             const m = Math.floor(totalKg / 40);
@@ -235,40 +264,60 @@
 
         function updateFinal() {
             let totalKg = calculateBagTotal();
-            let totalPrice = 0;
+            let subtotalPrice = 0;
             let lastRate = 0;
+            let advance = parseFloat(document.getElementById('s-advance').value) || 0;
 
             if(currentTab === 'simple') {
                 const mon = parseFloat(document.getElementById('s-mon').value) || 0;
                 const kg = parseFloat(document.getElementById('s-kg').value) || 0;
                 lastRate = parseFloat(document.getElementById('s-rate').value) || 0;
                 totalKg += (mon * 40) + kg;
-                totalPrice = totalKg * (lastRate / 40);
+                subtotalPrice = totalKg * (lastRate / 40);
+                
+                // পাটের ক্ষেত্রে অটোমেটিক 'ধরা' আপডেট
+                if(currentCrop === 'পাট') {
+                    document.getElementById('s-dhora').value = (totalKg / 5) || "";
+                }
             } else {
                 totalKg += lots.reduce((s, l) => s + l.totalKg, 0);
-                totalPrice = lots.reduce((s, l) => s + l.price, 0);
-                // For bags in multi-lot, we use the average rate of existing lots
-                let avgRate = lots.length > 0 ? (totalPrice / (totalKg - calculateBagTotal())) * 40 : 0;
-                totalPrice += calculateBagTotal() * (avgRate / 40);
+                subtotalPrice = lots.reduce((s, l) => s + l.price, 0);
+                let avgRate = lots.length > 0 ? (subtotalPrice / (totalKg - calculateBagTotal())) * 40 : 0;
+                subtotalPrice += calculateBagTotal() * (avgRate / 40);
                 lastRate = avgRate;
             }
 
             const m = Math.floor(totalKg / 40);
             const k = (totalKg % 40).toFixed(2);
+            const finalPrice = subtotalPrice - advance;
+
             document.getElementById('res-weight').innerText = `${m} মণ ${k} কেজি`;
             document.getElementById('res-kg-price').innerText = `৳ ${(lastRate/40).toFixed(2)}`;
-            document.getElementById('res-total-price').innerText = `৳ ${totalPrice.toLocaleString('bn-BD', {minimumFractionDigits: 2})}`;
+            document.getElementById('res-total-price').innerText = `৳ ${finalPrice.toLocaleString('bn-BD', {minimumFractionDigits: 2})}`;
             
+            if(advance > 0) {
+                document.getElementById('res-subtotal').innerHTML = `মোট বিল: ৳${subtotalPrice.toFixed(2)} | অগ্রিম বাদ: -৳${advance.toFixed(2)}`;
+            } else {
+                document.getElementById('res-subtotal').innerText = "";
+            }
+
             if(totalKg > 0) {
-                document.getElementById('res-text-explain').innerHTML = `<span class="text-emerald-400">${totalKg} কেজি</span> মালের হিসাবে <span class="text-amber-400">${m} মণ ${k} কেজি</span> হয়েছে।`;
+                let explainText = `<span class="text-emerald-400">${totalKg} কেজি</span> মালের হিসাবে <span class="text-amber-400">${m} মণ ${k} কেজি</span> হয়েছে।`;
+                if(currentCrop === 'পাট') {
+                    explainText += `<br><span class="text-lime-400">পাটের মোট ধরা: ${(totalKg/5).toFixed(1)} ধরা</span>`;
+                }
+                document.getElementById('res-text-explain').innerHTML = explainText;
             }
         }
 
         function resetAll() {
             if(confirm('সব ডাটা মুছে ফেলতে চান?')) {
                 document.querySelectorAll('input').forEach(i => i.value = '');
-                lots = []; bagData = [{ id: Date.now(), count: 0, wt: 40 }];
-                renderLots(); renderBags(); updateFinal();
+                lots = []; 
+                bagData = [{ id: Date.now(), count: 0, wt: 40 }];
+                renderLots(); 
+                renderBags(); 
+                updateFinal();
             }
         }
 
@@ -279,7 +328,9 @@
         }
 
         renderBags();
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+        if ('serviceWorker' in navigator) { 
+            navigator.serviceWorker.register('sw.js'); 
+        }
     </script>
 </body>
 </html>
