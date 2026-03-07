@@ -1,4 +1,4 @@
-const CACHE_NAME = 'noor-agro-v2';
+const CACHE_NAME = 'noor-agro-v3';
 const assets = ['./', './index.html', 'https://cdn.tailwindcss.com'];
 
 self.addEventListener('install', e => {
